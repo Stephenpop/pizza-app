@@ -39,20 +39,14 @@ const mockOrders = [
 
 export default function DashboardPage() {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const { user, logout } = useAuth()
+  const { user, logout, isLoaded } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    const checkAuth = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100))
-      if (!user) {
-        router.push("/login")
-      }
-      setIsLoading(false)
+    if (isLoaded && !user) {
+      router.push("/login")
     }
-    checkAuth()
-  }, [user, router])
+  }, [isLoaded, user, router])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,7 +61,7 @@ export default function DashboardPage() {
     router.push("/login")
   }
 
-  if (isLoading || !user) {
+  if (!isLoaded || !user) {
     return null
   }
 
